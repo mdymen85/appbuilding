@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Builder;
@@ -25,6 +26,9 @@ public class Floor {
 	@Column(nullable = false)
 	private Integer number;
 	
+//	@ManyToOne
+//	private Building Building;
+//	
 	public void setNumber(Integer number) {
 		if (number < 0) {
 			throw new IllegalArgumentException();

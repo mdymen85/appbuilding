@@ -7,15 +7,13 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.control.building.model.Building;
 import com.control.building.model.Floor;
 import com.control.building.repository.BuildingRepository;
 
 @SpringBootTest
-@Transactional
-class BuildingApplicationTests extends AbstractBuildingApplication  {
+public class Tests {
 
 	@Autowired
 	private BuildingRepository buildingRepository;
@@ -27,12 +25,8 @@ class BuildingApplicationTests extends AbstractBuildingApplication  {
 		.number(10)
 		.build();
 		
-		var floor1 = Floor.builder()
-		.number(11)
-		.build();
-		
 		var building = Building.builder()
-		.floors(List.of(floor, floor1))
+		.floors(List.of(floor))
 		.name("Iria")
 		.build();
 		
@@ -40,17 +34,7 @@ class BuildingApplicationTests extends AbstractBuildingApplication  {
 		
 		assertTrue(true);
 		
-		var list = this.buildingRepository.findAll();
-		
-		list.forEach(b -> {
-			var floors = b.getFloors();
-			assertTrue(true);	
-		});
-		
-		assertTrue(true);
-		
-
-		
 	}
 
+	
 }
