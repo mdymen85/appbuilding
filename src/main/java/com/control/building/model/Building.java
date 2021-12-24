@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name="BUILDING")
+@Table(name="BUILDINGS")
 @Data
 @Builder
 @NoArgsConstructor
@@ -32,10 +32,9 @@ import lombok.Setter;
 public class Building {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@NonNull
 	@Column(nullable = false)
 	private String name;
 	
@@ -46,9 +45,9 @@ public class Building {
 	
 	public void setName(String name) {
 		
-//		if (Strings.isNullOrEmpty(name)) {
-//			throw new IllegalArgumentException();
-//		}		
+		if (name == null || name.equals("")) {
+			throw new IllegalArgumentException();
+		}		
 		
 		this.name = name;
 	}
@@ -58,7 +57,11 @@ public class Building {
 			this.floors = new ArrayList<Floor>();
 		}
 		
-		this.floors.add(floor);
+		if (!this.floors.contains(floor)) {
+			this.floors.add(floor);
+			floor.setBuilding(this);
+		}
+
 	}
 	
 }
