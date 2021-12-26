@@ -10,10 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.control.building.model.Apartment;
 import com.control.building.model.Building;
 import com.control.building.model.Floor;
 import com.control.building.repository.BuildingRepository;
-import com.control.building.repository.FloorRepository;
 
 @SpringBootTest
 @Transactional
@@ -23,25 +23,41 @@ class BuildingApplicationTests extends AbstractBuildingApplication  {
 	private BuildingRepository buildingRepository;
 	
 	@Autowired
-	private FloorRepository floorRepository;
-	
-	@Autowired
 	private DelegateBuilding txDelegateBuilding;
+	
+	@Test
+	void createBuilding() {
+		var building = Building.builder()
+				.name("Classic")
+				.build();
+		
+		var savedBuilding = this.txDelegateBuilding.save(building);
+		
+		var loadedBuilding = this.buildingRepository.findById(savedBuilding.getId()).get();
+		
+		assertEquals(loadedBuilding.getName(), building.getName());
+	}
 	
 	@Test
 	void createAndSaveFloorAndBuilding() {
 		
 		var building = Building.builder()
 				.name("Iria")
+				.build();		
+		
+		var floor1 = Floor.builder()
+				.number(1)
+				.building(building)
 				.build();
 		
-		var floor1 = new Floor(1, building);
-		var floor2 = new Floor(2, building);
+		var floor2 = Floor.builder()
+				.number(2)
+				.building(building)
+				.build();		
 				
-		this.txDelegateBuilding.save(building);
+		var savedBuilding = this.txDelegateBuilding.save(building);
 				
-		Iterable<Building> list = this.buildingRepository.findAll();
-		var buildingLoaded = list.iterator().next();
+		var buildingLoaded = this.buildingRepository.findById(savedBuilding.getId()).get();
 
 		assertEquals(buildingLoaded.getName(), building.getName());
 		
@@ -69,14 +85,49 @@ class BuildingApplicationTests extends AbstractBuildingApplication  {
 		
 		assertEquals(buildingLoaded.getName(), building.getName());
 		
-		var floor1 = new Floor(1, building);
+		var floor1 = Floor.builder()
+				.number(1)
+				.building(building)
+					.build();
 		
-		var floor1Saved = this.floorRepository.save(floor1);
+		//var floor1 = new Floor(1, building);
 		
-		var floor1Loaded = this.floorRepository.findById(floor1Saved.getId());
+//		var floor1Saved = this.floorRepository.save(floor1);
+//		
+//		var floor1Loaded = this.floorRepository.findById(floor1Saved.getId());
+//		
+//		assertEquals(floor1Loaded.get().getNumber(), floor1.getNumber());
+//		assertEquals(floor1Loaded.get().getBuilding().getName(), floor1.getBuilding().getName());
 		
-		assertEquals(floor1Loaded.get().getNumber(), floor1.getNumber());
-		assertEquals(floor1Loaded.get().getBuilding().getName(), floor1.getBuilding().getName());
+	}
+	
+	@Test
+	void createApartments() {
+		
+		var building = Building.builder()
+				.name("Classic")
+				.build();
+		
+		var floor = Floor.builder()
+				.building(building)
+				.number(1)
+				.build();
+		
+		var apartment = Apartment.builder()
+				.floor(floor)
+				.number(10)
+				.build();
+		
+		this.txDelegateBuilding.save(building);
+		
+		
+				
+				
+		
+	}
+	
+	@Test
+	void createPerson() {
 		
 	}
 

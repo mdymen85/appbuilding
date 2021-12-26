@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Entity
@@ -23,6 +24,7 @@ public class Apartment {
 	@ManyToOne
 	private Floor floor;
 	
+	@Builder
 	public Apartment(Integer number, Floor floor) {
 		this.number = number;
 		this.floor = floor;

@@ -1,6 +1,9 @@
 package com.control.building.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -14,82 +17,78 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.Setter;
 
 @Entity
 @Table(name = "FLOORS")
 @Data
+@AllArgsConstructor
 public class Floor {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	private final Long id;
 	
 	@Column(nullable = false)
-	private Integer number;
+	private final Integer number;
 	
 	@ManyToOne
-	private Building building;
+	private final Building building;
 	
-	@Setter(value = AccessLevel.PRIVATE)
 	@OneToMany(cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "apartment_id" )
-	private Set<Apartment> apartments;
+	@JoinColumn(name = "floor_id" )
+	private final List<Apartment> apartments;	
 	
-	public Floor() {}
-	
-	public Floor (Integer number, Building building) {
-		this.commonConstructor(number, building);	
+	public Floor() {
+		this.id = null;
+		this.number = null;
+		this.building = null;
+		this.apartments = new ArrayList<Apartment>();
 	}
 	
-	public Floor (Integer number, Building building, Set<Apartment> apartments) {
-		this.commonConstructor(number, building);	
-		this.apartments = apartments;
-	}
-	
-	private void commonConstructor(Integer number, Building building) {
-		this.numberValidation(number);
-		this.buildingValidation(building);
-		
+	@Builder
+	public Floor(Integer number, Building building, ArrayList<Apartment> apartments, Long id) {	
+		this.id = null;
+		this.apartments = apartments == null ? new ArrayList<Apartment>() : apartments;
 		this.number = number;
+		this.numberValidation();
+		
 		this.building = building;
-		this.building.addFloor(this);
+		this.buildingValidation();
+		
+		this.building.addFloor(this);		
+		
 	}
 	
-	private void numberValidation(Integer number) {
+	private void numberValidation() {
 		if (number < 0) {
 			throw new IllegalArgumentException();
 		}
 	}
 	
-	private void buildingValidation(Building building) {
+	private void buildingValidation() {
 		if (building == null) {
 			throw new IllegalArgumentException();
 		}
 	}
-	
-	public void setNumber(Integer number) {
-		this.numberValidation(number);
-		this.number = number;
-	}
-	
-	public void setBuilding(Building building) {
-		this.buildingValidation(building);
-		this.building = building;
-		this.building.addFloor(this);
-	}
-	
+
+
 	public void addApartment(Apartment apartment) {
 		if (this.apartments == null) {
-			this.apartments = new HashSet<Apartment>();
+			throw new IllegalArgumentException();
 		}
 		
 		if (!this.apartments.contains(apartment)) {
 			this.apartments.add(apartment);
-			apartment.setFloor(this);
 		}
+	}
+	
+	public Optional<Apartment> findApartment(Apartment apartment) {
+		return this.apartments.stream()
+				.filter(a -> a.getNumber() == apartment.getNumber())
+				.findFirst();
 	}
 	
 }

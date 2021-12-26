@@ -1,7 +1,10 @@
 package com.control.building.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,55 +16,94 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 @Entity
 @Table(name="BUILDINGS")
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@Slf4j
 public class Building {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	private final Long id;
 	
 	@Column(nullable = false)
-	private String name;
+	private final String name;
 	
-	@Setter(value = AccessLevel.PRIVATE)
 	@OneToMany(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "building_id")
-	private List<Floor> floors;
+	private final List<Floor> floors;
+
+	public Building() {
+		this.id = null;
+		this.name = null;
+		this.floors = null;
+	}
 	
-	public void setName(String name) {
+	@Builder
+	public Building(String name, List<Floor> floors, Long id) {	
+		
+		if (floors == null) {
+			this.floors = new ArrayList<Floor>();
+		} else {
+			this.floors = floors;	
+		}
+
+		this.validateName(name);
+		this.name = name;
+
+		this.id = id;
+		this.validateId();
+		
+	}
+	
+	private void validateId() {
+		if (id == null) {		
+			log.warn("The object Building has a null id, so it will be created...");
+			return;
+		} 
+		
+		if (id < 0) {
+			throw new IllegalArgumentException();						
+		}
+		
+	}
+	
+	private void validateName(String name) {
 		
 		if (name == null || name.equals("")) {
 			throw new IllegalArgumentException();
 		}		
 		
-		this.name = name;
 	}
 	
+	//when i create a floor, i must add the building 
+	//in the constructor
 	public void addFloor(Floor floor) {
 		if (this.floors == null) {
-			this.floors = new ArrayList<Floor>();
+			throw new IllegalArgumentException();
 		}
 		
-		if (!this.floors.contains(floor)) {
+		boolean anyMatch = this.floors
+		.stream()
+		.anyMatch(f -> f.getNumber() == floor.getNumber());
+		
+		if (!anyMatch) {
 			this.floors.add(floor);
-			floor.setBuilding(this);
 		}
 
+	}
+	
+	public Optional<Floor> findFloor(Floor floor) {
+		return this.floors.stream()
+				.filter(f -> f.getNumber() == floor.getNumber())
+				.findFirst();
 	}
 	
 }
