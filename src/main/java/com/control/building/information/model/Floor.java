@@ -1,4 +1,4 @@
-package com.control.building.model;
+package com.control.building.information.model;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -39,7 +39,7 @@ public class Floor {
 	
 	@OneToMany(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "floor_id" )
-	private final List<Apartment> apartments;	
+	private final List<Apartment> apartments;	//get precisa por una copia inmutable
 	
 	public Floor() {
 		this.id = null;

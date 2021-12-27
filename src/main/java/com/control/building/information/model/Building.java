@@ -1,4 +1,4 @@
-package com.control.building.model;
+package com.control.building.information.model;
 
 import java.util.ArrayList;
 import java.util.HashSet;

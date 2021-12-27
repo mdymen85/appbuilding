@@ -1,4 +1,4 @@
-package com.control.building.model;
+package com.control.building.information.model;
 
 import javax.persistence.Embeddable;
 

@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.control.building.model.Building;
+import com.control.building.information.model.Building;
 import com.control.building.repository.BuildingRepository;
 
 import lombok.RequiredArgsConstructor;

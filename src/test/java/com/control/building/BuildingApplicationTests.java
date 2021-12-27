@@ -4,16 +4,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.control.building.model.Apartment;
-import com.control.building.model.Building;
-import com.control.building.model.Floor;
+import com.control.building.information.model.Apartment;
+import com.control.building.information.model.Building;
+import com.control.building.information.model.Floor;
+import com.control.building.people.model.OwnedApartment;
+import com.control.building.people.model.OwnedApartmentRepository;
 import com.control.building.repository.BuildingRepository;
+import com.control.building.repository.FloorRepository;
 
 @SpringBootTest
 @Transactional
@@ -21,6 +25,12 @@ class BuildingApplicationTests extends AbstractBuildingApplication  {
 
 	@Autowired
 	private BuildingRepository buildingRepository;
+	
+	@Autowired
+	private FloorRepository floorRepository;
+	
+	@Autowired
+	private OwnedApartmentRepository ownedApartmentRepository;
 	
 	@Autowired
 	private DelegateBuilding txDelegateBuilding;
@@ -79,25 +89,23 @@ class BuildingApplicationTests extends AbstractBuildingApplication  {
 				.name("Classic")
 				.build();
 		
-		var buildingSaved = this.txDelegateBuilding.save(building);
-		
-		var buildingLoaded = this.buildingRepository.findById(buildingSaved.getId()).get();	
-		
-		assertEquals(buildingLoaded.getName(), building.getName());
-		
 		var floor1 = Floor.builder()
 				.number(1)
 				.building(building)
 					.build();
 		
-		//var floor1 = new Floor(1, building);
+		var buildingSaved = this.txDelegateBuilding.save(building);
 		
-//		var floor1Saved = this.floorRepository.save(floor1);
-//		
-//		var floor1Loaded = this.floorRepository.findById(floor1Saved.getId());
-//		
-//		assertEquals(floor1Loaded.get().getNumber(), floor1.getNumber());
-//		assertEquals(floor1Loaded.get().getBuilding().getName(), floor1.getBuilding().getName());
+		System.out.println(floor1.getId());
+		
+		var buildingLoaded = this.buildingRepository.findById(buildingSaved.getId()).get();	
+		
+		assertEquals(buildingLoaded.getName(), building.getName());
+				
+		var floor1Loaded = this.floorRepository.find(floor1);
+
+		assertEquals(floor1Loaded.get().getNumber(), floor1.getNumber());
+		assertEquals(floor1Loaded.get().getBuilding().getName(), floor1.getBuilding().getName());
 		
 	}
 	
@@ -116,13 +124,15 @@ class BuildingApplicationTests extends AbstractBuildingApplication  {
 		var apartment = Apartment.builder()
 				.floor(floor)
 				.number(10)
+				.address("54 Street")
 				.build();
 		
 		this.txDelegateBuilding.save(building);
 		
+		Optional<OwnedApartment> ownedApartment = this.ownedApartmentRepository.find(apartment.getId());
 		
-				
-				
+		assertEquals(ownedApartment.get().getAddress(), apartment.getAddress());
+		assertEquals(ownedApartment.get().getNumber(), apartment.getNumber());
 		
 	}
 	

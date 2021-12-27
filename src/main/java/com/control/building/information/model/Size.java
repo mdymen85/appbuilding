@@ -1,4 +1,4 @@
-package com.control.building.model;
+package com.control.building.information.model;
 
 public enum Size {
 	SMALL("S"), MIDDLE("M"), BIG("B");
