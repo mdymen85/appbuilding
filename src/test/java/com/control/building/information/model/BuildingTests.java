@@ -1,6 +1,7 @@
-package com.control.building;
+package com.control.building.information.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -11,34 +12,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.control.building.information.AbstractApplicationTest;
+import com.control.building.information.DelegateBuilding;
 import com.control.building.information.model.Apartment;
 import com.control.building.information.model.Building;
 import com.control.building.information.model.Floor;
+import com.control.building.information.repository.ApartmentRepository;
+import com.control.building.information.repository.BuildingRepository;
+import com.control.building.information.repository.FloorRepository;
+import com.control.building.people.model.Identification;
 import com.control.building.people.model.OwnedApartment;
-import com.control.building.people.model.OwnedApartmentRepository;
-import com.control.building.repository.BuildingRepository;
-import com.control.building.repository.FloorRepository;
+import com.control.building.people.model.Owner;
+import com.control.building.people.repository.OwnedApartmentRepository;
 
 @SpringBootTest
 @Transactional
-class BuildingApplicationTests extends AbstractBuildingApplication  {
+class BuildingTests extends AbstractApplicationTest  {
 
-	@Autowired
-	private BuildingRepository buildingRepository;
-	
-	@Autowired
-	private FloorRepository floorRepository;
-	
-	@Autowired
-	private OwnedApartmentRepository ownedApartmentRepository;
-	
-	@Autowired
-	private DelegateBuilding txDelegateBuilding;
-	
 	@Test
 	void createBuilding() {
 		var building = Building.builder()
 				.name("Classic")
+				.address("54 Street")
 				.build();
 		
 		var savedBuilding = this.txDelegateBuilding.save(building);
@@ -46,6 +41,7 @@ class BuildingApplicationTests extends AbstractBuildingApplication  {
 		var loadedBuilding = this.buildingRepository.findById(savedBuilding.getId()).get();
 		
 		assertEquals(loadedBuilding.getName(), building.getName());
+		assertEquals(loadedBuilding.getAddress(), building.getAddress());
 	}
 	
 	@Test
@@ -110,34 +106,37 @@ class BuildingApplicationTests extends AbstractBuildingApplication  {
 	}
 	
 	@Test
-	void createApartments() {
+	void createPerson() {
 		
 		var building = Building.builder()
-				.name("Classic")
+				.name("Better Hall")
+				.address("Espinola")
 				.build();
 		
 		var floor = Floor.builder()
 				.building(building)
-				.number(1)
+				.number(0)
 				.build();
 		
 		var apartment = Apartment.builder()
 				.floor(floor)
-				.number(10)
-				.address("54 Street")
+				.number(1)
 				.build();
 		
 		this.txDelegateBuilding.save(building);
 		
-		Optional<OwnedApartment> ownedApartment = this.ownedApartmentRepository.find(apartment.getId());
+		var owner = Owner.builder()
+				.apartments(List.of(apartment))
+				.name("Martin")
+				.identification(Identification.builder().identification("1234567").build())
+				.build();
 		
-		assertEquals(ownedApartment.get().getAddress(), apartment.getAddress());
-		assertEquals(ownedApartment.get().getNumber(), apartment.getNumber());
+		this.txDelegateBuilding.save(owner);
 		
-	}
-	
-	@Test
-	void createPerson() {
+		var buildingLoaded = this.apartmentRepository.find(apartment.getId());
+		
+		int i = 0;
+		
 		
 	}
 

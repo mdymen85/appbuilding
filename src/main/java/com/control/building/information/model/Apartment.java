@@ -10,37 +10,42 @@ import javax.persistence.Table;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
 @Entity
 @Table(name = "APARTMENTS")
-@Data
+@Getter
 public class Apartment {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private final Long id;
+	private Long id;
 	
-	private final Integer number;
-	
-	private final String address;
+	private Integer number;
 	
 	@ManyToOne
-	private final Floor floor;
+	private Floor floor;
 	
-	public Apartment() {
-		this.id = null;
-		this.number = null;
-		this.address = null;
-		this.floor = null;
-	}
+	public Apartment() {}
 	
 	@Builder
-	public Apartment(Long id, String address, Integer number, Floor floor) {
+	public Apartment(Long id, Integer number, Floor floor) {
 		this.id = id;
-		this.address = address;
 		this.number = number;
 		this.floor = floor;
 		this.floor.addApartment(this);
+	}
+	
+	public Building getBuilding() {
+		return this.floor.getBuilding();
+	}
+	
+	protected void setNumber(Integer number) {
+		this.number = number;
+	}
+	
+	public Integer getFloorNumber() {
+		return this.floor.getNumber();
 	}
 	
 }

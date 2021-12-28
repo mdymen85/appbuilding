@@ -1,4 +1,4 @@
-package com.control.building.repository;
+package com.control.building.information.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

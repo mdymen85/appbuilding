@@ -1,4 +1,4 @@
-package com.control.building.repository;
+package com.control.building.information.repository;
 
 import java.util.Optional;
 
@@ -15,8 +15,8 @@ public class ApartmentRepository {
 	@Autowired
 	private EntityManager entityManager;
 	
-	public Optional<Apartment> find(Apartment apartment) {
-		return Optional.of(entityManager.find(Apartment.class, apartment.getId()));
+	public Optional<Apartment> find(Long id) {
+		return Optional.of(entityManager.find(Apartment.class, id));
 	}
 	
 }

@@ -12,14 +12,15 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.control.building.information.model.Apartment;
-import com.control.building.information.model.Identification;
 
 import javax.persistence.JoinColumn;
 
 import lombok.Builder;
+import lombok.Getter;
 
 @Entity
 @Table(name = "OWNERS")
+@Getter
 public class Owner {
 
 	@Id

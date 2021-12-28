@@ -20,33 +20,29 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
 @Entity
 @Table(name = "FLOORS")
-@Data
+@Getter
 @AllArgsConstructor
 public class Floor {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private final Long id;
+	private Long id;
 	
 	@Column(nullable = false)
-	private final Integer number;
+	private Integer number;
 	
 	@ManyToOne
-	private final Building building;
+	private Building building;
 	
 	@OneToMany(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "floor_id" )
-	private final List<Apartment> apartments;	//get precisa por una copia inmutable
+	private List<Apartment> apartments;
 	
-	public Floor() {
-		this.id = null;
-		this.number = null;
-		this.building = null;
-		this.apartments = new ArrayList<Apartment>();
-	}
+	public Floor() {}
 	
 	@Builder
 	public Floor(Integer number, Building building, ArrayList<Apartment> apartments, Long id) {	
@@ -89,6 +85,10 @@ public class Floor {
 		return this.apartments.stream()
 				.filter(a -> a.getNumber() == apartment.getNumber())
 				.findFirst();
+	}
+	
+	public List<Apartment> getApartments() {
+		return new ArrayList<Apartment>(this.apartments);
 	}
 	
 }

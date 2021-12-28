@@ -19,51 +19,48 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 @Entity
 @Table(name="BUILDINGS")
-@Data
-@Builder
+@Getter
 @AllArgsConstructor
 @Slf4j
 public class Building {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private final Long id;
+	private Long id;
 	
 	@Column(nullable = false)
-	private final String name;
+	private String name;
+	
+	private String address;
 	
 	@OneToMany(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "building_id")
-	private final List<Floor> floors;
+	private List<Floor> floors;
 
-	public Building() {
-		this.id = null;
-		this.name = null;
-		this.floors = null;
-	}
+	public Building() {}
 	
 	@Builder
-	public Building(String name, List<Floor> floors, Long id) {	
-		
+	public Building(String name, List<Floor> floors, Long id, String address) {			
+		this.setFloors(floors);
+		this.setName(name);
+		this.setId(id);		
+		this.address = address;
+	}
+	
+	private void setFloors(List<Floor> floors) {
 		if (floors == null) {
 			this.floors = new ArrayList<Floor>();
 		} else {
 			this.floors = floors;	
 		}
-
-		this.validateName(name);
-		this.name = name;
-
-		this.id = id;
-		this.validateId();
-		
 	}
 	
-	private void validateId() {
+	private void setId(Long id) {
 		if (id == null) {		
 			log.warn("The object Building has a null id, so it will be created...");
 			return;
@@ -72,14 +69,17 @@ public class Building {
 		if (id < 0) {
 			throw new IllegalArgumentException();						
 		}
+		this.id = id;
 		
 	}
 	
-	private void validateName(String name) {
+	private void setName(String name) {
 		
 		if (name == null || name.equals("")) {
 			throw new IllegalArgumentException();
 		}		
+		
+		this.name = name;
 		
 	}
 	
@@ -100,10 +100,29 @@ public class Building {
 
 	}
 	
-	public Optional<Floor> findFloor(Floor floor) {
+	public Optional<Floor> findFloor(Integer number) {
 		return this.floors.stream()
-				.filter(f -> f.getNumber() == floor.getNumber())
+				.filter(f -> f.getNumber() == number)
 				.findFirst();
+	}
+	
+	public Optional<Apartment> findApartment(Integer number) {
+		
+		for (Floor floor : floors) {
+			return floor.getApartments()
+					.stream()
+					.filter(a -> a.getNumber() == number)
+					.findAny();
+		}
+		return Optional.empty();
+	}
+	
+	public void updateApartmentNumber(Apartment apartment, Integer number) {
+		apartment.setNumber(number);
+	}
+	
+	public void updateApartmentFloor(Apartment apartment, Floor floor) {
+		//TODO: validations		
 	}
 	
 }

@@ -20,7 +20,6 @@
   <classpathentry kind="var" path="M2_REPO/org/hibernate/common/hibernate-commons-annotations/5.1.2.Final/hibernate-commons-annotations-5.1.2.Final.jar" sourcepath="M2_REPO/org/hibernate/common/hibernate-commons-annotations/5.1.2.Final/hibernate-commons-annotations-5.1.2.Final-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/hibernate/hibernate-core/5.6.1.Final/hibernate-core-5.6.1.Final.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/zaxxer/HikariCP/4.0.3/HikariCP-4.0.3.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/hsqldb/hsqldb/2.5.2/hsqldb-2.5.2.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/sun/istack/istack-commons-runtime/3.0.12/istack-commons-runtime-3.0.12.jar" sourcepath="M2_REPO/com/sun/istack/istack-commons-runtime/3.0.12/istack-commons-runtime-3.0.12-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/fasterxml/jackson/core/jackson-annotations/2.13.0/jackson-annotations-2.13.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/fasterxml/jackson/core/jackson-core/2.13.0/jackson-core-2.13.0.jar"/>
@@ -57,6 +56,11 @@
   <classpathentry kind="var" path="M2_REPO/org/projectlombok/lombok/1.18.22/lombok-1.18.22.jar" sourcepath="M2_REPO/org/projectlombok/lombok/1.18.22/lombok-1.18.22-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/mockito/mockito-core/4.0.0/mockito-core-4.0.0.jar" sourcepath="M2_REPO/org/mockito/mockito-core/4.0.0/mockito-core-4.0.0-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/mockito/mockito-junit-jupiter/4.0.0/mockito-junit-jupiter-4.0.0.jar" sourcepath="M2_REPO/org/mockito/mockito-junit-jupiter/4.0.0/mockito-junit-jupiter-4.0.0-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/modelmapper/modelmapper/2.3.5/modelmapper-2.3.5.jar" sourcepath="M2_REPO/org/modelmapper/modelmapper/2.3.5/modelmapper-2.3.5-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/home/mtuser/.m2/repository/org/modelmapper/modelmapper/2.3.5/modelmapper-2.3.5-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
   <classpathentry kind="var" path="M2_REPO/mysql/mysql-connector-java/8.0.27/mysql-connector-java-8.0.27.jar" sourcepath="M2_REPO/mysql/mysql-connector-java/8.0.27/mysql-connector-java-8.0.27-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/objenesis/objenesis/3.2/objenesis-3.2.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar" sourcepath="M2_REPO/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0-sources.jar"/>

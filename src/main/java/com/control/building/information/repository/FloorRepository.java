@@ -1,4 +1,4 @@
-package com.control.building.repository;
+package com.control.building.information.repository;
 
 import java.util.Optional;
 
