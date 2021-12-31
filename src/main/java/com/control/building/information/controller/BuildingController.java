@@ -35,7 +35,9 @@ public class BuildingController {
 	
 	@RequestMapping(path = "/v1/building/{id}", method = RequestMethod.GET)
 	public ResponseEntity<ResponseBuildingDTO> load(@PathVariable Long id) {
-		return new ResponseEntity<>(null, HttpStatus.OK);
+		var building = buildingService.load(id);
+		var response = modelMapper.map(building, ResponseBuildingDTO.class);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
 	@RequestMapping(path = "/v1/building/{id}", method = RequestMethod.DELETE)

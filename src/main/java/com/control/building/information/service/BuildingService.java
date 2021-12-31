@@ -20,10 +20,10 @@ public class BuildingService {
 
 	private final BuildingRepository buildingRepository;
 	private final ApartmentRepository apartmentRepository;
-	private final ModelMapper modelMapper;
+	private final BuildingMapper buildingMapper;
 	
 	public Building save(BuildingDTO buildingDTO) {
-		var building = modelMapper.map(buildingDTO, Building.class);
+		Building building = this.buildingMapper.toBuilding(buildingDTO);
 		return this.buildingRepository.save(building);	
 	}
 	

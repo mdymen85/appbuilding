@@ -1,12 +1,17 @@
 package com.control.building.information.dto;
 
-import lombok.Builder;
+import java.util.ArrayList;
+import java.util.List;
+
+import lombok.NoArgsConstructor;
 import lombok.Data;
 
 @Data
-@Builder
+@NoArgsConstructor
 public class ResponseBuildingDTO {
 
-	private final String name;
-	private final String address;	
+	private String name;
+	private String address;	
+	private List<ResponseFloorDTO> floors = new ArrayList<>();
+	
 }

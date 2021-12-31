@@ -1,5 +1,10 @@
 package com.control.building.information.dto;
 
-public class ApartmentDTO {
+import lombok.Data;
 
+@Data
+public class ApartmentDTO {
+	
+	private Integer number;
+	
 }
