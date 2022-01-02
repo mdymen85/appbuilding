@@ -62,7 +62,7 @@ public class Apartment implements Comparable<Apartment> {
 		if (apartment == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.number.compareTo(apartment.getNumber());
+		return this.number.intValue() - apartment.getNumber().intValue();
 	}
 	
 }

@@ -5,21 +5,14 @@ import java.util.Optional;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import com.control.building.information.model.Floor;
 
 @Repository
-public class FloorRepository {
+public interface FloorRepository extends CrudRepository<Floor, Long> {
 
-	@Autowired
-	private EntityManager entityManager;
-	
-	public Optional<Floor> find(Floor floor) {
-		return this.find(floor.getId());
-	}
-	
-	public Optional<Floor> find(Long id) {
-		return Optional.of(entityManager.find(Floor.class, id));
-	}
+	Optional<Floor> findByNumber(Integer integer, Integer floor);
+
 }

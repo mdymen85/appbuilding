@@ -36,7 +36,7 @@ public class InformationControllerAdvice {
 	
 	@ExceptionHandler(FloorDoesNotExistException.class) 
 	public ResponseEntity<ResponseErrorObject> floorDoesNotExistException(FloorDoesNotExistException error) {			
-		return new ResponseError(error.getCode(), messageSource.getMessage(error.getCode(), new Object[] {error.getId()}, Locale.ENGLISH), HttpStatus.BAD_REQUEST).getResponseErrorObject(); 
+		return new ResponseError(error.getCode(), messageSource.getMessage(error.getCode(), new Object[] {error.getBuilding(), error.getNumber()}, Locale.ENGLISH), HttpStatus.BAD_REQUEST).getResponseErrorObject(); 
 	}
 	
 	

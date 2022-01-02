@@ -6,10 +6,12 @@ import lombok.Getter;
 @Getter
 public class FloorDoesNotExistException extends BaseClassException {
 
-	private Long id;
+	private Integer building;
+	private Integer number;
 	
-	public FloorDoesNotExistException(Long id) {
-		this.id = id;
+	public FloorDoesNotExistException(Integer building, Integer number) {
+		this.building = building;
+		this.number = number;
 	}
 	
 	@Override
@@ -17,8 +19,12 @@ public class FloorDoesNotExistException extends BaseClassException {
 		return "BID-4";
 	}
 	
-	public Long getId() {
-		return id;
+	public Integer getBuilding() {
+		return building;
+	}
+	
+	public Integer getNumber() {
+		return number;
 	}
 
 }

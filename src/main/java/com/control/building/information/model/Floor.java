@@ -97,7 +97,7 @@ public class Floor implements Comparable<Floor> {
 		if (floor == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.getNumber().compareTo(floor.getNumber());
+		return this.number.intValue() - floor.getNumber().intValue();
 	}
 	
 }

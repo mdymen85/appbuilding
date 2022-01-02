@@ -3,6 +3,7 @@ package com.control.building.information.service;
 import org.springframework.stereotype.Service;
 
 import com.control.building.information.dto.BuildingDTO;
+import com.control.building.information.exception.ApartmentDoesNotExistsException;
 import com.control.building.information.exception.FloorDoesNotExistException;
 import com.control.building.information.model.Apartment;
 import com.control.building.information.model.Building;
@@ -35,13 +36,18 @@ public class BuildingService {
 	}
 	
 	public Apartment loadAparment(Long id) {
-		return this.apartmentRepository.find(id)
+		return this.apartmentRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException());
 	}
 
-	public Floor loadFloor(Long id) {
-		return this.floorRepository.find(id)
-				.orElseThrow(() -> new FloorDoesNotExistException(id));
+	public Floor loadFloor(Integer building, Integer number) {
+		return this.floorRepository.findByNumber(building, number)
+				.orElseThrow(() -> new FloorDoesNotExistException(building, number));
+	}
+
+	public Object loadApartment(Integer floor, Integer apartment) {
+		return this.apartmentRepository.findByNumber(floor, apartment)
+				.orElseThrow(() -> new ApartmentDoesNotExistsException(floor, apartment));
 	}
 	
 }

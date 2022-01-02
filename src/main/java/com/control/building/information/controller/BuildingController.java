@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.control.building.information.dto.BuildingDTO;
+import com.control.building.information.dto.ResponseApartmentDTO;
 import com.control.building.information.dto.ResponseBuildingDTO;
 import com.control.building.information.dto.ResponseFloorDTO;
 import com.control.building.information.service.BuildingService;
@@ -48,9 +49,9 @@ public class BuildingController {
 
 	}
 	
-	@RequestMapping(path = "/v1/building/{id}/floor", method = RequestMethod.GET)
-	public ResponseEntity<ResponseFloorDTO> loadFloor(@PathVariable Long id) {
-		var response = modelMapper.map(buildingService.loadFloor(id), ResponseFloorDTO.class);
+	@RequestMapping(path = "/v1/building/{floor}/floor/{apartment}/apartment", method = RequestMethod.GET)
+	public ResponseEntity<ResponseApartmentDTO> loadApartment(@PathVariable Integer floor, @PathVariable Integer apartment) {
+		var response = modelMapper.map(buildingService.loadApartment(floor, apartment), ResponseApartmentDTO.class);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	

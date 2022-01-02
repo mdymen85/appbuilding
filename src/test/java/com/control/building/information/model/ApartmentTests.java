@@ -64,7 +64,7 @@ public class ApartmentTests extends AbstractApplicationTest {
 		this.txDelegateBuilding.save(building);
 		
 		//check if the apartment is saved correctly, and change the apartment number
-		var apartmentLoaded = this.apartmentRepository.find(apartment.getId()).get();
+		var apartmentLoaded = this.apartmentRepository.findById(apartment.getId()).get();
 		
 		assertEquals(apartmentLoaded.getNumber(), apartment.getNumber());
 		assertEquals(apartmentLoaded.getFloorNumber(), floor.getNumber());
