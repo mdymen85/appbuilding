@@ -8,6 +8,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.control.building.information.exception.FloorMustNotBeNullException;
+
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -15,7 +17,7 @@ import lombok.Getter;
 @Entity
 @Table(name = "APARTMENTS")
 @Getter
-public class Apartment {
+public class Apartment implements Comparable<Apartment> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -46,6 +48,21 @@ public class Apartment {
 	
 	public Integer getFloorNumber() {
 		return this.floor.getNumber();
+	}
+	
+	protected void setFloor(Floor floor) {
+		if (floor == null) {
+			throw new FloorMustNotBeNullException();
+		}
+		this.floor = floor;
+	}
+
+	@Override
+	public int compareTo(Apartment apartment) {
+		if (apartment == null) {
+			throw new IllegalArgumentException();
+		}
+		return this.number.compareTo(apartment.getNumber());
 	}
 	
 }

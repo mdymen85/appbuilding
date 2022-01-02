@@ -16,6 +16,10 @@ public class FloorRepository {
 	private EntityManager entityManager;
 	
 	public Optional<Floor> find(Floor floor) {
-		return Optional.of(entityManager.find(Floor.class, floor.getId()));
+		return this.find(floor.getId());
+	}
+	
+	public Optional<Floor> find(Long id) {
+		return Optional.of(entityManager.find(Floor.class, id));
 	}
 }

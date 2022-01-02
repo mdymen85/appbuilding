@@ -1,13 +1,10 @@
 package com.control.building.information.model;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,9 +13,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.junit.platform.commons.util.StringUtils;
+
+import com.control.building.information.exception.ApartmentMustNotBeNullException;
+import com.control.building.information.exception.BuildingBasicInformationException;
+import com.control.building.information.exception.FloorMustNotBeNullException;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,28 +35,40 @@ public class Building {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@Column(nullable = false)
 	private String name;
 	
 	private String address;
 	
 	@OneToMany(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "building_id")
-	private List<Floor> floors;
+	private Set<Floor> floors;
 
 	public Building() {}
 	
 	@Builder
-	public Building(String name, List<Floor> floors, Long id, String address) {			
+	public Building(String name, Set<Floor> floors, Long id, String address) {		
+		this.setBasicInformation(name, address);
 		this.setFloors(floors);
-		this.setName(name);
 		this.setId(id);		
-		this.address = address;
 	}
 	
-	private void setFloors(List<Floor> floors) {
+	/**
+	 * 
+	 * @param name
+	 * @param address
+	 */
+	public void setBasicInformation(String name, String address) {
+		if (StringUtils.isBlank(name) && StringUtils.isBlank(address)) {
+			throw new BuildingBasicInformationException();
+		}
+		this.name = name;
+		this.address = address;
+		
+	}
+
+	private void setFloors(Set<Floor> floors) {
 		if (floors == null) {
-			this.floors = new ArrayList<Floor>();
+			this.floors = new TreeSet<Floor>();
 		} else {
 			this.floors = floors;	
 		}
@@ -73,21 +87,11 @@ public class Building {
 		
 	}
 	
-	private void setName(String name) {
-		
-		if (name == null || name.equals("")) {
-			throw new IllegalArgumentException();
-		}		
-		
-		this.name = name;
-		
-	}
-	
 	//when i create a floor, i must add the building 
 	//in the constructor
 	public void addFloor(Floor floor) {
 		if (this.floors == null) {
-			throw new IllegalArgumentException();
+			throw new FloorMustNotBeNullException();
 		}
 		
 		boolean anyMatch = this.floors
@@ -118,11 +122,14 @@ public class Building {
 	}
 	
 	public void updateApartmentNumber(Apartment apartment, Integer number) {
+		if (apartment == null) {
+			throw new ApartmentMustNotBeNullException();
+		}
 		apartment.setNumber(number);
 	}
 	
 	public void updateApartmentFloor(Apartment apartment, Floor floor) {
-		//TODO: validations		
+		apartment.setFloor(floor);	
 	}
 	
 }

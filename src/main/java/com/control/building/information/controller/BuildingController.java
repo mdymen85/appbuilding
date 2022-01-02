@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.control.building.information.dto.BuildingDTO;
 import com.control.building.information.dto.ResponseBuildingDTO;
+import com.control.building.information.dto.ResponseFloorDTO;
 import com.control.building.information.service.BuildingService;
 
 import lombok.RequiredArgsConstructor;
@@ -45,6 +46,12 @@ public class BuildingController {
 	public void delete(@PathVariable Long id) {
 		
 
+	}
+	
+	@RequestMapping(path = "/v1/building/{id}/floor", method = RequestMethod.GET)
+	public ResponseEntity<ResponseFloorDTO> loadFloor(@PathVariable Long id) {
+		var response = modelMapper.map(buildingService.loadFloor(id), ResponseFloorDTO.class);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
 }

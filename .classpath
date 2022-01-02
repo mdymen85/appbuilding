@@ -15,6 +15,7 @@
   <classpathentry kind="var" path="M2_REPO/net/bytebuddy/byte-buddy/1.11.22/byte-buddy-1.11.22.jar" sourcepath="M2_REPO/net/bytebuddy/byte-buddy/1.11.22/byte-buddy-1.11.22-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/net/bytebuddy/byte-buddy-agent/1.11.22/byte-buddy-agent-1.11.22.jar" sourcepath="M2_REPO/net/bytebuddy/byte-buddy-agent/1.11.22/byte-buddy-agent-1.11.22-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/fasterxml/classmate/1.5.1/classmate-1.5.1.jar" sourcepath="M2_REPO/com/fasterxml/classmate/1.5.1/classmate-1.5.1-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0.jar" sourcepath="M2_REPO/org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/h2database/h2/1.4.200/h2-1.4.200.jar" sourcepath="M2_REPO/com/h2database/h2/1.4.200/h2-1.4.200-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/hamcrest/hamcrest/2.2/hamcrest-2.2.jar" sourcepath="M2_REPO/org/hamcrest/hamcrest/2.2/hamcrest-2.2-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/hibernate/common/hibernate-commons-annotations/5.1.2.Final/hibernate-commons-annotations-5.1.2.Final.jar" sourcepath="M2_REPO/org/hibernate/common/hibernate-commons-annotations/5.1.2.Final/hibernate-commons-annotations-5.1.2.Final-sources.jar"/>

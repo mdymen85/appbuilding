@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -26,7 +27,7 @@ import lombok.Getter;
 @Table(name = "FLOORS")
 @Getter
 @AllArgsConstructor
-public class Floor {
+public class Floor implements Comparable<Floor> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -40,14 +41,14 @@ public class Floor {
 	
 	@OneToMany(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "floor_id" )
-	private List<Apartment> apartments;
+	private Set<Apartment> apartments;
 	
 	public Floor() {}
 	
 	@Builder
-	public Floor(Integer number, Building building, ArrayList<Apartment> apartments, Long id) {	
+	public Floor(Integer number, Building building, HashSet<Apartment> apartments, Long id) {	
 		this.id = null;
-		this.apartments = apartments == null ? new ArrayList<Apartment>() : apartments;
+		this.apartments = apartments == null ? new TreeSet<Apartment>() : apartments;
 		this.number = number;
 		this.numberValidation();
 		
@@ -89,6 +90,14 @@ public class Floor {
 	
 	public List<Apartment> getApartments() {
 		return new ArrayList<Apartment>(this.apartments);
+	}
+
+	@Override
+	public int compareTo(Floor floor) {
+		if (floor == null) {
+			throw new IllegalArgumentException();
+		}
+		return this.getNumber().compareTo(floor.getNumber());
 	}
 	
 }
