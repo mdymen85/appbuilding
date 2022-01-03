@@ -12,6 +12,7 @@ public class ResponseBuildingDTO {
 
 	private String name;
 	private String address;	
+	private String uuid;
 	private List<ResponseFloorDTO> floors = new ArrayList<>();
 	
 }

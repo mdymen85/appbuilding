@@ -35,24 +35,17 @@ public class BuildingController {
 		return new ResponseEntity<>(response, HttpStatus.CREATED);		
 	}
 	
-	@RequestMapping(path = "/v1/building/{id}", method = RequestMethod.GET)
-	public ResponseEntity<ResponseBuildingDTO> load(@PathVariable Long id) {
-		var building = buildingService.load(id);
+	@RequestMapping(path = "/v1/building/{uuid}", method = RequestMethod.GET)
+	public ResponseEntity<ResponseBuildingDTO> load(@PathVariable String uuid) {
+		var building = buildingService.load(uuid);
 		var response = modelMapper.map(building, ResponseBuildingDTO.class);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
-	@RequestMapping(path = "/v1/building/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(path = "/v1/building/{uuid}", method = RequestMethod.DELETE)
 	@ResponseStatus(code = HttpStatus.OK)
-	public void delete(@PathVariable Long id) {
-		
+	public void delete(@PathVariable String uuid) {
+		this.buildingService.delete(uuid);
 
-	}
-	
-	@RequestMapping(path = "/v1/building/{floor}/floor/{apartment}/apartment", method = RequestMethod.GET)
-	public ResponseEntity<ResponseApartmentDTO> loadApartment(@PathVariable Integer floor, @PathVariable Integer apartment) {
-		var response = modelMapper.map(buildingService.loadApartment(floor, apartment), ResponseApartmentDTO.class);
-		return new ResponseEntity<>(response, HttpStatus.OK);
-	}
-	
+	}	
 }

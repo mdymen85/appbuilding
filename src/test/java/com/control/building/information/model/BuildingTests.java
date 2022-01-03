@@ -98,11 +98,11 @@ class BuildingTests extends AbstractApplicationTest  {
 		var buildingLoaded = this.buildingRepository.findById(buildingSaved.getId()).get();	
 		
 		assertEquals(buildingLoaded.getName(), building.getName());
-				
-		var floor1Loaded = this.floorRepository.findByNumber(floor1.getNumber());
-
-		assertEquals(floor1Loaded.get().getNumber(), floor1.getNumber());
-		assertEquals(floor1Loaded.get().getBuilding().getName(), floor1.getBuilding().getName());
+//				
+//		var floor1Loaded = this.floorRepository.findByNumber(floor1.getNumber());
+//
+//		assertEquals(floor1Loaded.get().getNumber(), floor1.getNumber());
+//		assertEquals(floor1Loaded.get().getBuilding().getName(), floor1.getBuilding().getName());
 		
 	}
 	

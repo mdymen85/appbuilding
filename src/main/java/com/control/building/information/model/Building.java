@@ -3,8 +3,10 @@ package com.control.building.information.model;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,6 +19,7 @@ import org.junit.platform.commons.util.StringUtils;
 
 import com.control.building.information.exception.ApartmentMustNotBeNullException;
 import com.control.building.information.exception.BuildingBasicInformationException;
+import com.control.building.information.exception.FloorAlreadyExistsException;
 import com.control.building.information.exception.FloorMustNotBeNullException;
 
 import lombok.AllArgsConstructor;
@@ -35,6 +38,9 @@ public class Building {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
+	@Column(unique = true)
+	private String uuid; //UUID has a bad performance, but i put it in this case just for simplify
+	
 	private String name;
 	
 	private String address;
@@ -46,10 +52,11 @@ public class Building {
 	public Building() {}
 	
 	@Builder
-	public Building(String name, Set<Floor> floors, Long id, String address) {		
+	public Building(String name, Set<Floor> floors, Long id, String address, String uuid) {		
 		this.setBasicInformation(name, address);
 		this.setFloors(floors);
 		this.setId(id);		
+		this.uuid = uuid == null ? UUID.randomUUID().toString() : uuid;
 	}
 	
 	/**
@@ -94,12 +101,10 @@ public class Building {
 			throw new FloorMustNotBeNullException();
 		}
 		
-		boolean anyMatch = this.floors
-		.stream()
-		.anyMatch(f -> f.getNumber() == floor.getNumber());
+		boolean saved = this.floors.add(floor);
 		
-		if (!anyMatch) {
-			this.floors.add(floor);
+		if (!saved) {
+			throw new FloorAlreadyExistsException(this.uuid, floor.getNumber());
 		}
 
 	}

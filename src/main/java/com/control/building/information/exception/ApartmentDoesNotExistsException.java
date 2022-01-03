@@ -8,10 +8,12 @@ public class ApartmentDoesNotExistsException extends BaseClassException {
 
 	private Integer apartment;
 	private Integer floor;
+	private String uuid;
 	
-	public ApartmentDoesNotExistsException(Integer apartment, Integer floor) {
+	public ApartmentDoesNotExistsException(String uuid, Integer apartment, Integer floor) {
 		this.apartment = apartment;
 		this.floor = floor;
+		this.uuid = uuid;
 	}
 	
 	@Override

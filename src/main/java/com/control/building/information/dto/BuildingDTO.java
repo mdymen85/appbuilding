@@ -18,6 +18,7 @@ public class BuildingDTO {
 
 	private final String name;
 	private final String address;
+	private final String uuid;
 	private final List<FloorDTO> floors;
 	
 }

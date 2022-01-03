@@ -1,5 +1,7 @@
 package com.control.building.information.service;
 
+import java.util.Iterator;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
@@ -21,16 +23,16 @@ public class BuildingMapper {
 				.name(buildingDTO.getName())
 				.build();
 		
-		buildingDTO.getFloors()
+		Set<Floor> floors = buildingDTO.getFloors()
 			.stream()
 			.map(fDTO -> this.toFloor(fDTO, building))
-			.forEach(f -> building.addFloor(f));
+			.collect(Collectors.toSet());
 		
 		return building;
 		
 	}
 	
-	private Floor toFloor(FloorDTO floorDTO, Building building) {
+	public Floor toFloor(FloorDTO floorDTO, Building building) {
 		
 		var floor = Floor.builder()
 				.building(building)
