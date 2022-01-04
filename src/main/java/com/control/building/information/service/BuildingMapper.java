@@ -39,6 +39,10 @@ public class BuildingMapper {
 				.number(floorDTO.getNumber())
 				.build();
 		
+		if (floorDTO.getApartments() == null) {
+			return floor;
+		}
+		
 		floorDTO.getApartments()
 			.stream()
 			.map(aDTO -> this.toApartment(aDTO, floor))

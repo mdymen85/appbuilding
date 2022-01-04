@@ -88,4 +88,14 @@ public class ApartmentTests extends AbstractApplicationTest {
 
 	}
 	
+	@Test
+	void createApartmentFromExistingBuildingAndFloor() {
+		
+	}
+	
+	@Test
+	void createExistingApartment() {
+		
+	}
+	
 }

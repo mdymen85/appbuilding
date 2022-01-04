@@ -1,5 +1,6 @@
 package com.control.building.information.model;
 
+import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
@@ -14,8 +15,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.junit.platform.commons.util.StringUtils;
 
 import com.control.building.information.exception.ApartmentMustNotBeNullException;
 import com.control.building.information.exception.BuildingBasicInformationException;
@@ -65,9 +64,9 @@ public class Building {
 	 * @param address
 	 */
 	public void setBasicInformation(String name, String address) {
-		if (StringUtils.isBlank(name) && StringUtils.isBlank(address)) {
-			throw new BuildingBasicInformationException();
-		}
+//		if (StringUtils.isBlank(name) && StringUtils.isBlank(address)) {
+//			throw new BuildingBasicInformationException();
+//		}
 		this.name = name;
 		this.address = address;
 		
@@ -110,9 +109,14 @@ public class Building {
 	}
 	
 	public Optional<Floor> findFloor(Integer number) {
-		return this.floors.stream()
-				.filter(f -> f.getNumber() == number)
-				.findFirst();
+		Iterator<Floor> it = this.floors.iterator();
+		while (it.hasNext()) {
+			Floor floor = it.next();
+			if (floor.getNumber() == number) {
+				return Optional.of(floor);
+			}
+		}		
+		return Optional.empty();
 	}
 	
 	public Optional<Apartment> findApartment(Integer number) {

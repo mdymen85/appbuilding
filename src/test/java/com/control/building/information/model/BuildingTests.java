@@ -4,17 +4,24 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.control.building.BuildingApplication;
 import com.control.building.information.AbstractApplicationTest;
 import com.control.building.information.DelegateBuilding;
+import com.control.building.information.dto.BuildingDTO;
+import com.control.building.information.dto.FloorDTO;
 import com.control.building.information.model.Apartment;
 import com.control.building.information.model.Building;
 import com.control.building.information.model.Floor;
@@ -26,119 +33,101 @@ import com.control.building.people.model.OwnedApartment;
 import com.control.building.people.model.Owner;
 import com.control.building.people.repository.OwnedApartmentRepository;
 
-@SpringBootTest
+import io.restassured.RestAssured;
+
+import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.with;
+
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItems;
+
+@SpringBootTest(classes = BuildingApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 @Transactional
 class BuildingTests extends AbstractApplicationTest  {
 
+	@LocalServerPort
+	private int localServerPort;
+	
+    @BeforeEach
+    public void restAssuredPort() {
+    	RestAssured.port = localServerPort;  
+    }
+	
 	@Test
 	void createBuilding() {
+
 		var building = Building.builder()
 				.name("Classic")
 				.address("54 Street")
 				.build();
 		
-		var savedBuilding = this.txDelegateBuilding.save(building);
+		String uuid = 
+		with()
+			.header("Content-Type","application/json")
+			.body(building)
+		.when()
+			.post("/api/v1/building")
+		.then()				
+			.statusCode(201)
+			.body("name", is(building.getName()))
+			.body("address", is(building.getAddress()))
+		.extract()
+			.path("uuid");			
 		
-		var loadedBuilding = this.buildingRepository.findById(savedBuilding.getId()).get();
+		var loadedBuilding = this.buildingRepository.findByUuid(uuid).get();
 		
 		assertEquals(loadedBuilding.getName(), building.getName());
 		assertEquals(loadedBuilding.getAddress(), building.getAddress());
 	}
 	
 	@Test
-	void createAndSaveFloorAndBuilding() {
+	void createFloorsAndBuilding() {
 		
-		var building = Building.builder()
-				.name("Iria")
-				.build();		
-		
-		var floor1 = Floor.builder()
+		var floor1 = FloorDTO.builder()
 				.number(1)
-				.building(building)
 				.build();
 		
-		var floor2 = Floor.builder()
+		var floor2 = FloorDTO.builder()
 				.number(2)
-				.building(building)
-				.build();		
-				
-		var savedBuilding = this.txDelegateBuilding.save(building);
-				
-		var buildingLoaded = this.buildingRepository.findById(savedBuilding.getId()).get();
-
-		assertEquals(buildingLoaded.getName(), building.getName());
+				.build();
 		
-		Set<Floor> floors = buildingLoaded.getFloors();
-	
-//		var floor1Loaded = floors.get(0);
-//		assertEquals(floor1Loaded.getNumber(), floor1.getNumber());
-//		assertEquals(floor1Loaded.getBuilding().getName(), floor1.getBuilding().getName());
-//		
-//		var floor2Loaded = floors.get(1);
-//		assertEquals(floor2Loaded.getNumber(), floor2.getNumber());
-//		assertEquals(floor2Loaded.getBuilding().getName(), floor2.getBuilding().getName());
-
-	}
-	
-	@Test
-	void saveFloorOnCreatedBuilding() {
-		var building = Building.builder()
+		var building = BuildingDTO.builder()
+				.address("Rua 10 de Setembro")
 				.name("Classic")
+				.uuid(null)
 				.build();
 		
-		var floor1 = Floor.builder()
-				.number(1)
-				.building(building)
-					.build();
-		
-		var buildingSaved = this.txDelegateBuilding.save(building);
-		
-		System.out.println(floor1.getId());
-		
-		var buildingLoaded = this.buildingRepository.findById(buildingSaved.getId()).get();	
-		
-		assertEquals(buildingLoaded.getName(), building.getName());
-//				
-//		var floor1Loaded = this.floorRepository.findByNumber(floor1.getNumber());
-//
-//		assertEquals(floor1Loaded.get().getNumber(), floor1.getNumber());
-//		assertEquals(floor1Loaded.get().getBuilding().getName(), floor1.getBuilding().getName());
-		
-	}
-	
-	@Test
-	void createPerson() {
-		
-		var building = Building.builder()
-				.name("Better Hall")
-				.address("Espinola")
-				.build();
-		
-		var floor = Floor.builder()
-				.building(building)
-				.number(0)
-				.build();
-		
-		var apartment = Apartment.builder()
-				.floor(floor)
-				.number(1)
-				.build();
-		
-		this.txDelegateBuilding.save(building);
-		
-		var owner = Owner.builder()
-				.apartments(List.of(apartment))
-				.name("Martin")
-				.identification(Identification.builder().identification("1234567").build())
-				.build();
-		
-		this.txDelegateBuilding.save(owner);
-		
-		var buildingLoaded = this.apartmentRepository.findById(apartment.getId());
-		
-		int i = 0;
+		building.getFloors().add(floor1);
+		building.getFloors().add(floor2);
+					
+		String uuid = 
+			with()
+				.header("Content-Type","application/json")
+				.body(building)
+			.when()
+				.post("/api/v1/building")
+			.then()				
+				.statusCode(201)
+				.body("name", is(building.getName()))
+				.body("address", is(building.getAddress()))
+			.extract()
+				.path("uuid");
 				
-	}
+		var buildingLoaded = this.buildingRepository.loadWithFloors(uuid).get();
+
+		assertEquals(buildingLoaded.getName(), building.getName());					
+	
+		var floor1Loaded = buildingLoaded.findFloor(floor1.getNumber()).get();
+		assertEquals(floor1Loaded.getNumber(), floor1.getNumber());
+		assertEquals(floor1Loaded.getBuilding().getName(), building.getName());
+		
+		var floor2Loaded = buildingLoaded.findFloor(floor2.getNumber()).get();
+		assertEquals(floor2Loaded.getNumber(), floor2.getNumber());
+		assertEquals(floor2Loaded.getBuilding().getName(), building.getName());
+
+	}	
 	
 	@Test 
 	void buildingWithoutName() {
@@ -148,4 +137,8 @@ class BuildingTests extends AbstractApplicationTest  {
 				.build();
 	}
 
+	@Test
+	void deleteFloor() {
+		
+	}
 }

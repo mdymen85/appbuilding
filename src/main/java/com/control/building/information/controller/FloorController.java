@@ -26,7 +26,7 @@ public class FloorController {
 	@RequestMapping(path = "/v1/building/{uuid}/floor", method = RequestMethod.POST)
 	public ResponseEntity<ResponseFloorDTO> save(@PathVariable String uuid, @RequestBody FloorDTO floorDTO) {
 		var response = modelMapper.map(this.floorService.save(uuid, floorDTO), ResponseFloorDTO.class);
-		return new ResponseEntity<>(response, HttpStatus.OK);
+		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(path = "/v1/building/{uuid}/floor/{floor}", method = RequestMethod.GET)

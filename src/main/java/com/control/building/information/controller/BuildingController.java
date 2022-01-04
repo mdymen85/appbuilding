@@ -46,6 +46,5 @@ public class BuildingController {
 	@ResponseStatus(code = HttpStatus.OK)
 	public void delete(@PathVariable String uuid) {
 		this.buildingService.delete(uuid);
-
 	}	
 }

@@ -1,18 +1,34 @@
 package com.control.building.information.model;
 
+import static io.restassured.RestAssured.with;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest
+import com.control.building.BuildingApplication;
+import com.control.building.information.AbstractApplicationTest;
+import com.control.building.information.dto.FloorDTO;
+
+import io.restassured.RestAssured;
+
+@SpringBootTest(classes = BuildingApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 @Transactional
-public class FloorTests {
-//
-//	@Autowired
-//	private BuildingCon
+public class FloorTests extends AbstractApplicationTest {
+
+	@LocalServerPort
+	private int localServerPort;
+	
+    @BeforeEach
+    public void restAssuredPort() {
+    	RestAssured.port = localServerPort;  
+    }
 	
 	/**
 	 * As building has a Set collection of floors
@@ -47,6 +63,45 @@ public class FloorTests {
 		building.addFloor(floor3);
 		
 		assertEquals(building.getFloors().size(), 2);					
+		
+	}
+	
+	@Test
+	void createExistingFloor() {
+		
+	}
+	
+	@Test
+	void deleteFloor() {
+		
+	}
+	
+	@Test
+	void saveFloorOnCreatedBuilding() {
+		var building = Building.builder()
+				.name("Classic")
+				.build();
+		
+		Floor.builder()
+				.number(1)
+				.building(building)
+					.build();
+		
+		var buildingSaved = this.txDelegateBuilding.save(building);		
+
+		var floor = FloorDTO.builder()
+				.apartments(null)
+				.number(2)
+				.build();
+		
+		with()
+			.header("Content-Type","application/json")
+			.body(floor)
+		.when()
+			.post("/api/v1/building/{uuid}/floor", buildingSaved.getUuid())
+		.then()				
+			.statusCode(201)
+			.body("number", is(floor.getNumber()));		
 		
 	}
 	
