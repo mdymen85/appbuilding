@@ -6,3 +6,7 @@ I want to share a little code about some develop that I did, applying concepts o
 
 Here, as I explained in the first paragraph, all the changes must happend through the aggregate root class; so in that case, we can have a consistent hierarchy, without any danger of uncontrolled change.
 
+## Model
+
+I used **JPA** to model the domain. As Hibernate suggested in the best practices of JPA, I based all the relationships in bidirectional
+
