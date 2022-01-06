@@ -31,10 +31,10 @@ public class FloorService {
 		Optional<Floor> optFloor = floorRepository.find(uuid, floorDTO.getNumber());
 		
 		if (optFloor.isEmpty()) {
-			var building = this.buildingService.loadWithFloors(uuid);
+			var building = this.buildingService.load(uuid);
 			
-			var floor = buildingMapper.toFloor(floorDTO, building); //here we add the floor to the building
-			
+			var floor = buildingMapper.toBidirectionalFloor(floorDTO, building);
+						
 			this.floorRepository.save(floor);
 			
 			return floor;

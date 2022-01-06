@@ -1,6 +1,7 @@
 package com.control.building.information.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.control.building.information.dto.BuildingDTO;
 import com.control.building.information.exception.BuildingDoesNotExistsException;
@@ -32,9 +33,9 @@ public class BuildingService {
 				.orElseThrow(() -> new BuildingDoesNotExistsException(uuid));
 	}
 
+	@Transactional
 	public void delete(String uuid) {
-		this.buildingRepository.deleteByUuid(uuid);
-		
+		this.buildingRepository.deleteByUuid(uuid);		
 	}
 
 	public Building loadWithFloors(String uuid) {

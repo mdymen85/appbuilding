@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.control.building.information.exception.ApartmentMustNotBeNullException;
 import com.control.building.information.exception.BuildingBasicInformationException;
@@ -35,29 +36,29 @@ public class Building {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	protected Long id;
 	
 	@Column(unique = true)
-	private String uuid; //UUID has a bad performance, but i put it in this case just for simplify
+	protected String uuid; //UUID has a bad performance, but i put it in this case just for simplify
 	
-	private String name;
+	protected String name;
 	
-	private String address;
+	protected String address;
 	
 	@OneToMany(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "building_id")
-	private Set<Floor> floors;
+	protected Set<Floor> floors;
 
 	public Building() {}
 	
 	@Builder
-	public Building(String name, Set<Floor> floors, Long id, String address, String uuid) {		
+	public Building(String name, Set<Floor> floors, Long id, String address, String uuid, Boolean bidirectionalFloor) {		
 		this.setBasicInformation(name, address);
 		this.setFloors(floors);
 		this.setId(id);		
 		this.uuid = uuid == null ? UUID.randomUUID().toString() : uuid;
 	}
-	
+		
 	/**
 	 * 
 	 * @param name

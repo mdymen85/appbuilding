@@ -74,4 +74,13 @@ public class InformationControllerAdvice {
 				HttpStatus.BAD_REQUEST)
 				.getResponseErrorObject(); 
 	}	
+	
+	
+	@ExceptionHandler(ApartmentAlreadyExistsException.class) 
+	public ResponseEntity<ResponseErrorObject> apartmentAlreadyExistsException(ApartmentAlreadyExistsException error) {			
+		return new ResponseError(error.getCode(), 
+				messageSource.getMessage(error.getCode(), new Object[] {error.getApartmentNumber(), error.getFloorNumber(), error.getUuid()}, Locale.ENGLISH), 
+				HttpStatus.BAD_REQUEST)
+				.getResponseErrorObject(); 
+	}	
 }

@@ -12,6 +12,7 @@ import com.control.building.information.dto.FloorDTO;
 import com.control.building.information.model.Apartment;
 import com.control.building.information.model.Building;
 import com.control.building.information.model.Floor;
+import com.control.building.information.model.FloorBidirectional;
 
 @Component
 public class BuildingMapper {
@@ -23,40 +24,17 @@ public class BuildingMapper {
 				.name(buildingDTO.getName())
 				.build();
 		
-		Set<Floor> floors = buildingDTO.getFloors()
-			.stream()
-			.map(fDTO -> this.toFloor(fDTO, building))
-			.collect(Collectors.toSet());
+		buildingDTO.getFloors()
+				.stream()
+				.map(fDTO -> FloorType.BIDIRECTIONAL.toFloor(fDTO, building))
+				.collect(Collectors.toSet());
 		
 		return building;
 		
 	}
 	
-	public Floor toFloor(FloorDTO floorDTO, Building building) {
-		
-		var floor = Floor.builder()
-				.building(building)
-				.number(floorDTO.getNumber())
-				.build();
-		
-		if (floorDTO.getApartments() == null) {
-			return floor;
-		}
-		
-		floorDTO.getApartments()
-			.stream()
-			.map(aDTO -> this.toApartment(aDTO, floor))
-			.forEach(a -> floor.addApartment(a));
-				
-		return floor;
-		
+	public Floor toBidirectionalFloor(FloorDTO floorDTO, Building building) {
+		return FloorType.UNIDIRECTIONAL.toFloor(floorDTO, building);
 	}
-	
-	private Apartment toApartment(ApartmentDTO apartment, Floor floor) {
-		return Apartment.builder()
-				.floor(floor)
-				.number(apartment.getNumber())
-				.build();
-	}
-	
+
 }

@@ -35,7 +35,6 @@ public class Apartment implements Comparable<Apartment> {
 		this.id = id;
 		this.number = number;
 		this.floor = floor;
-		this.floor.addApartment(this);
 	}
 	
 	public Building getBuilding() {

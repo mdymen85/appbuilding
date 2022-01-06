@@ -45,6 +45,7 @@ public class Floor implements Comparable<Floor> {
 	
 	public Floor() {}
 	
+	
 	@Builder
 	public Floor(Integer number, Building building, HashSet<Apartment> apartments, Long id) {	
 		this.id = null;
@@ -53,9 +54,7 @@ public class Floor implements Comparable<Floor> {
 		this.numberValidation();
 		
 		this.building = building;
-		this.buildingValidation();
-		
-		this.building.addFloor(this);		
+		this.buildingValidation();	
 		
 	}
 	
