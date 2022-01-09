@@ -22,7 +22,7 @@ As i mentioned before, i tried to mantain a data consistency, so all of the enti
 
 ## Test
 
-I developed some tests using **Rest Assured** to guaranteed the 
+I developed some tests using **Rest Assured** to guaranteed the APIs from the beginning to the response of the endpoint.
 
 ## Curls
 
@@ -137,4 +137,7 @@ curl --location --request POST 'localhost:8080/api/v1/building/{{uuid}}/floor/2/
 curl --location --request GET 'localhost:8080/api/v1/building/{{uuid}}/floor/2/apartment/1'
 ```
 
+## Articles
 
+https://martinfowler.com/tags/domain%20driven%20design.html
+https://www.dddcommunity.org/library/vernon_2011/
