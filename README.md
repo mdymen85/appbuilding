@@ -139,5 +139,6 @@ curl --location --request GET 'localhost:8080/api/v1/building/{{uuid}}/floor/2/a
 
 ## Articles
 
-https://martinfowler.com/tags/domain%20driven%20design.html
-https://www.dddcommunity.org/library/vernon_2011/
+[Martin Fowler's page](https://martinfowler.com/tags/domain%20driven%20design.html)
+[DDD Community](https://www.dddcommunity.org/library/vernon_2011/)
+
