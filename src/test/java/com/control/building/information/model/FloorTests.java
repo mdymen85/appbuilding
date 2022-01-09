@@ -3,7 +3,10 @@ package com.control.building.information.model;
 import static io.restassured.RestAssured.with;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.control.building.BuildingApplication;
 import com.control.building.information.AbstractApplicationTest;
 import com.control.building.information.dto.FloorDTO;
+import com.control.building.information.exception.FloorAlreadyExistsException;
 
 import io.restassured.RestAssured;
 
@@ -59,27 +63,46 @@ public class FloorTests extends AbstractApplicationTest {
 				.build();
 		
 		building.addFloor(floor1); 
-		building.addFloor(floor2); //repeated
-		building.addFloor(floor3);
-		
-		assertEquals(building.getFloors().size(), 2);					
-		
+		assertThrows(FloorAlreadyExistsException.class, () -> building.addFloor(floor2));
 	}
 	
 	@Test
 	void createExistingFloor() {
+		var building = Building.builder()
+				.name("Classic")
+				.name("10 setember")
+				.build();
+		
+		FloorBidirectional.floorBidirectional()
+				.number(1)
+				.building(building)
+					.build();
+		
+		var buildingSaved = this.txDelegateBuilding.save(building);		
+
+		var floor = FloorDTO.builder()
+				.apartments(null)
+				.number(1)
+				.build();
+		
+		var r = with()
+			.header("Content-Type","application/json")
+			.body(floor)
+		.when()
+			.post("/api/v1/building/{uuid}/floor", buildingSaved.getUuid())
+		.then()				
+			.statusCode(400)
+			.body("code", is("BID-7"))
+			.body("message", is(String.format("Floor %s in the building %s already exists", floor.getNumber(), buildingSaved.getUuid())));					
 		
 	}
 	
-	@Test
-	void deleteFloor() {
-		
-	}
 	
 	@Test
 	void saveFloorOnCreatedBuilding() {
 		var building = Building.builder()
 				.name("Classic")
+				.name("10 setember")
 				.build();
 		
 		Floor.builder()
@@ -102,6 +125,12 @@ public class FloorTests extends AbstractApplicationTest {
 		.then()				
 			.statusCode(201)
 			.body("number", is(floor.getNumber()));		
+		
+		var floorSaved = this.floorRepository.find(buildingSaved.getUuid(), floor.getNumber()).get();
+
+		assertEquals(floor.getNumber(), floorSaved.getNumber());
+		assertEquals(building.getAddress(), floorSaved.getBuilding().getAddress());
+		assertEquals(building.getName(), floorSaved.getBuilding().getName());
 		
 	}
 	

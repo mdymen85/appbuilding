@@ -29,6 +29,7 @@ public class ApartmentService {
 		if (optApartment.isEmpty()) {
 			var floor = floorService.load(uuid, floorNumber);	
 			
+			//In CQRS pattern, probably i wont need this.
 			var apartment = ApartmentType.UNIDIRECTIONAL.toApartment(apartmentDTO, floor);
 			
 			this.apartmentRepository.save(apartment);

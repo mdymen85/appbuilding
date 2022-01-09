@@ -31,32 +31,32 @@ public class ApartmentTests extends AbstractApplicationTest {
 				.address("Constituyente")
 				.build();
 		
-		var floor = Floor.builder()
+		var floor = FloorBidirectional.floorBidirectional()
 				.building(building)
 				.number(0)
 				.build();	
 		
-		var apartment = Apartment.builder()
+		var apartment = ApartmentBidirectional.apartmentBidirectional()
 				.floor(floor)
 				.number(3)
 				.build();
 		
-		Apartment.builder()
+		ApartmentBidirectional.apartmentBidirectional()
 				.floor(floor)
 				.number(4)
 				.build();
 		
-		Apartment.builder()
+		ApartmentBidirectional.apartmentBidirectional()
 				.floor(floor)
 				.number(5)
 				.build();
 		
-		Apartment.builder()
+		ApartmentBidirectional.apartmentBidirectional()
 				.floor(floor)
 				.number(6)
 				.build();
 		
-		Apartment.builder()
+		ApartmentBidirectional.apartmentBidirectional()
 				.floor(floor)
 				.number(5)
 				.build();
@@ -64,7 +64,7 @@ public class ApartmentTests extends AbstractApplicationTest {
 		this.txDelegateBuilding.save(building);
 		
 		//check if the apartment is saved correctly, and change the apartment number
-		var apartmentLoaded = this.apartmentRepository.findById(apartment.getId()).get();
+		var apartmentLoaded = this.apartmentRepository.findByNumber(apartment.getNumber()).get();
 		
 		assertEquals(apartmentLoaded.getNumber(), apartment.getNumber());
 		assertEquals(apartmentLoaded.getFloorNumber(), floor.getNumber());
@@ -88,14 +88,5 @@ public class ApartmentTests extends AbstractApplicationTest {
 
 	}
 	
-	@Test
-	void createApartmentFromExistingBuildingAndFloor() {
-		
-	}
-	
-	@Test
-	void createExistingApartment() {
-		
-	}
 	
 }

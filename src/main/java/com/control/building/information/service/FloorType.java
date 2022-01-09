@@ -7,6 +7,13 @@ import com.control.building.information.model.Building;
 import com.control.building.information.model.Floor;
 import com.control.building.information.model.FloorBidirectional;
 
+/**
+ * 
+ * In CQRS pattern, probably i wont need this.
+ * 
+ * @author mdymen85
+ *
+ */
 public enum FloorType {
 	UNIDIRECTIONAL {
 		@Override

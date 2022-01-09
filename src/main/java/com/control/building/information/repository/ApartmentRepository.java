@@ -11,10 +11,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.control.building.information.model.Apartment;
+import com.control.building.information.model.Building;
 
 @Repository
 public interface ApartmentRepository extends CrudRepository<Apartment, Long>{
 
 	@Query("SELECT apartment FROM Apartment apartment JOIN FETCH apartment.floor floor JOIN FETCH floor.building building WHERE building.uuid = :uuid AND floor.number = :floor AND apartment.number = :apartment")
 	public Optional<Apartment> find(@Param("uuid") String uuid, @Param("floor") Integer floor, @Param("apartment") Integer apartment);
+
+	public Optional<Apartment> findByNumber(Integer number);
 }

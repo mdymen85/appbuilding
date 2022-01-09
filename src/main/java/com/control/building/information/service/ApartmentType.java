@@ -5,6 +5,13 @@ import com.control.building.information.model.Apartment;
 import com.control.building.information.model.ApartmentBidirectional;
 import com.control.building.information.model.Floor;
 
+/**
+ * 
+ * In CQRS pattern, probably i wont need this.
+ * 
+ * @author mdymen85
+ *
+ */
 public enum ApartmentType {
 
 	UNIDIRECTIONAL {

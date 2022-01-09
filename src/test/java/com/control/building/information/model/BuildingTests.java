@@ -128,17 +128,5 @@ class BuildingTests extends AbstractApplicationTest  {
 		assertEquals(floor2Loaded.getBuilding().getName(), building.getName());
 
 	}	
-	
-	@Test 
-	void buildingWithoutName() {
-		var building = Building.builder()
-				.address("")
-				.name("a  ")
-				.build();
-	}
 
-	@Test
-	void deleteFloor() {
-		
-	}
 }

@@ -33,6 +33,7 @@ public class FloorService {
 		if (optFloor.isEmpty()) {
 			var building = this.buildingService.load(uuid);
 			
+			//In CQRS pattern, probably i wont need this.
 			var floor = buildingMapper.toBidirectionalFloor(floorDTO, building);
 						
 			this.floorRepository.save(floor);

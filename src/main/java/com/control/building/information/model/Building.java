@@ -15,7 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.control.building.information.exception.ApartmentMustNotBeNullException;
 import com.control.building.information.exception.BuildingBasicInformationException;
@@ -36,14 +37,14 @@ public class Building {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	protected Long id;
+	private Long id;
 	
 	@Column(unique = true)
-	protected String uuid; //UUID has a bad performance, but i put it in this case just for simplify
+	private String uuid; //UUID has a bad performance, but i put it in this case just for simplify
 	
-	protected String name;
+	private String name;
 	
-	protected String address;
+	private String address;
 	
 	@OneToMany(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "building_id")
@@ -65,9 +66,9 @@ public class Building {
 	 * @param address
 	 */
 	public void setBasicInformation(String name, String address) {
-//		if (StringUtils.isBlank(name) && StringUtils.isBlank(address)) {
-//			throw new BuildingBasicInformationException();
-//		}
+		if (StringUtils.isBlank(name) && StringUtils.isBlank(address)) {
+			throw new BuildingBasicInformationException();
+		}
 		this.name = name;
 		this.address = address;
 		
