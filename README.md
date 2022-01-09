@@ -26,6 +26,10 @@ I developed some tests using **Rest Assured** to guaranteed the
 
 ## Curls
 
+Im shearing some curls to test the application
+
+### Building
+
 ```
 curl --location --request POST 'localhost:8080/api/v1/building' \
 --header 'Content-Type: application/json' \
@@ -86,6 +90,51 @@ curl --location --request POST 'localhost:8080/api/v1/building' \
         }
     ]
 }'
+```
+
+```
+curl --location --request GET 'localhost:8080/api/v1/building/{{uuid}}'
+```
+
+### Floor
+
+```
+curl --location --request POST 'localhost:8080/api/v1/building/{{uuid}}/floor' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "number": 4,
+    "apartments": [
+        {
+            "number": 41         
+        },
+        {
+            "number": 42            
+        },
+        {
+            "number": 43            
+        }
+        ,{
+            "number": 44            
+        }
+    ]
+}'
+```
+
+```
+curl --location --request GET 'localhost:8080/api/v1/building/{{uuid}}/floor/4'
+```
+
+### Aparments
+
+```
+curl --location --request POST 'localhost:8080/api/v1/building/{{uuid}}/floor/2/apartment' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "number":2
+}'
+```
+```
+curl --location --request GET 'localhost:8080/api/v1/building/{{uuid}}/floor/2/apartment/1'
 ```
 
 
